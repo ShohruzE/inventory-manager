@@ -2,7 +2,6 @@
 
 import { Box, Stack, TextField, Button, Typography } from '@mui/material'
 import React, { useState } from 'react'
-import { redirect } from 'next/navigation';
 
 import { addItem } from '../lib/util';
 
@@ -12,12 +11,11 @@ const AddItem = () => {
   const [quantity, setQuantity] = useState(0);
 
   const handleSubmit = () => {
-    console.log('submit pressed');
-    console.log(name, quantity);
+    // console.log('submit pressed');
+    // console.log(name, quantity);
     addItem(name, quantity);
     setName('');
     setQuantity(0);
-    redirect('/');
   }
 
   return (

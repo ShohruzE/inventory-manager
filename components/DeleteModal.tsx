@@ -19,7 +19,7 @@ type DeleteModalProps = {
 const DeleteModal = ({ item, isDeleteModalOpen, setIsDeleteModalOpen, handleClose }: DeleteModalProps) => {
 
   const handleSubmit = () => {
-    console.log('submit pressed');
+    // console.log('submit pressed');
     deleteItem(item.id); // call to firestore function
     setIsDeleteModalOpen(false);
   }
