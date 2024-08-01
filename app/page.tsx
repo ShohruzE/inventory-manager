@@ -2,8 +2,6 @@ import { Box, Container, Typography, Grid } from "@mui/material";
 import ItemList from "../components/ItemList";
 import AddItem from "@/components/AddItem";
 
-const items = ['item1', 'item2', 'item3', 'item4', 'item5', 'item6', 'item7', 'item8', 'item9', 'item10'];
-
 export default function Home() {
 
   return (
