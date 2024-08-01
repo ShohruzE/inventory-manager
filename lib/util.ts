@@ -1,5 +1,5 @@
 import { db } from "./firebase";
-import { collection, getDocs, DocumentData, setDoc, doc, deleteDoc, updateDoc, serverTimestamp, addDoc } from "firebase/firestore"; 
+import { collection, getDocs, DocumentData, setDoc, doc, deleteDoc, updateDoc, serverTimestamp, addDoc, query, where } from "firebase/firestore"; 
 
 type Item = {
     id: string;
@@ -40,4 +40,17 @@ export async function updateItem(id: string, name: string, quantity: number) {
         quantity: quantity,
         timestamp: serverTimestamp()
     });
+}
+
+export async function getItemsByQuantityFilter(min: number, max: number) {
+    const q = query(collection(db, "inventory"),
+        where('quantity', '>=', min),
+        where('quantity', '<=', max));
+    const querySnapshot = await getDocs(q);
+    const items: DocumentData[] = [];
+    querySnapshot.forEach((doc) => {
+      items.push(doc.data());
+    });
+    console.log(items);
+    return items;
 }
