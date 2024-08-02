@@ -3,3 +3,17 @@
   padding: 0;
   margin: 0;
 }
+
+.navbar-link {
+  color: #fff;
+  text-decoration: none;
+  padding: 0.5rem 0;
+}
+
+.navbar-link:hover {
+  border-bottom: 2px solid #fff;
+}
+
+.login-link:hover {
+  color: #fff;
+}
