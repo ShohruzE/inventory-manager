@@ -5,15 +5,18 @@ import { getAuth, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
 import { useRouter } from 'next/navigation';
 import { Stack, Button } from '@mui/material';
 
-import { app } from '../../lib/firebase';
+import { app, auth } from '../../lib/firebase';
 
 const Auth = () => {
 
   const [user, setUser] = useState(null);
   const router = useRouter();
 
+  if (auth?.currentUser) {
+    router.push('/item-list');
+  }
+
   useEffect(() => {
-    const auth = getAuth(app);
     const unsubscribe = auth.onAuthStateChanged((user) => {
         if (user) {
             setUser(user);
@@ -27,7 +30,6 @@ const Auth = () => {
   }, []);
 
   const signInWithGoogle = async () => {
-    const auth = getAuth(app);
     const provider = new GoogleAuthProvider();
     try {
         await signInWithPopup(auth, provider);

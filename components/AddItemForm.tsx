@@ -3,10 +3,11 @@
 import { Box, Stack, TextField, Button, Typography, Alert } from '@mui/material'
 import React, { useState } from 'react'
 import Link from 'next/link';
+import { auth } from '../lib/firebase';
 
 import { addItem } from '../lib/util';
 
-const AddItem = () => {
+const AddItemForm = () => {
 
   const [name, setName] = useState('');
   const [quantity, setQuantity] = useState(0);
@@ -18,13 +19,12 @@ const AddItem = () => {
     setIsSubmitted(false);
     addItem(name, quantity);
     setName('');
-    setQuantity(0);
     setIsSubmitted(true);
   }
 
   return (
-    <Box width="100%" height="50vh">
-        <Typography variant="h4" textAlign={'center'} sx={{marginBottom:"2rem"}}>Add Items</Typography>
+    <Box width="50%" height="50vh" sx={{flexGrow:1}}>
+        <Typography variant="h4" textAlign={'center'} sx={{marginBottom:"2rem"}}>Add an Item</Typography>
         <Stack direction='column' spacing={2}>
           <TextField 
             required 
@@ -42,14 +42,14 @@ const AddItem = () => {
             type="number" 
             label="Item Quantity" 
             variant="outlined"
-            value={quantity}
             onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                 setQuantity(event.target.value === '' ? 0 : parseInt(event.target.value));
             }}
           />
           <Stack direction='column' spacing={2}>
             <Box width="100%">
-              {isSubmitted && <Alert severity="success">Item added successfully. Refresh to see the changes</Alert>}
+              {isSubmitted && auth?.currentUser && <Alert severity="success">Item added successfully!</Alert>}
+              {isSubmitted && !auth?.currentUser && <Alert severity="error">Unable to add an item. You are not logged in.</Alert>}
             </Box>
             <Stack direction='row' alignItems="center" spacing={4}>
               <Button variant="contained" color="primary" onClick={() => handleSubmit()}>Add Item</Button>
@@ -63,4 +63,4 @@ const AddItem = () => {
   )
 }
 
-export default AddItem
+export default AddItemForm
