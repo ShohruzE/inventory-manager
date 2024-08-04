@@ -1,5 +1,6 @@
 import { db, auth, storage } from "./firebase";
 import { collection, getDocs, DocumentData, getDoc, setDoc, doc, deleteDoc, updateDoc, serverTimestamp, addDoc, query, where } from "firebase/firestore"; 
+import { ref, uploadString, getDownloadURL } from "firebase/storage";
 
 type Item = {
     userId: string;
@@ -14,7 +15,6 @@ export async function getItems() {
     try {
         const userId = auth?.currentUser?.uid;
         if (!userId) throw new Error('User is not authenticated');
-    
     
         const q = query(collection(db, "inventory"), where('id', '==', userId));
         const querySnapshot = await getDocs(q);
@@ -49,6 +49,31 @@ export async function addItem(name: string, quantity: number) {
         console.error('Error adding document: ', error);
     }
 
+}
+
+export async function addItemWithImage(name: string, quantity: number, image: string) {
+    try {
+        const userId = auth?.currentUser?.uid;
+        if (!userId) throw new Error("User not authenticated");
+
+        const storageRef = ref(storage, `images/${userId}/${name}`);
+        const snapshot = await uploadString(storageRef, image, 'data_url');
+        const imageUrl = await getDownloadURL(snapshot.ref);
+    
+        const docRef = await addDoc(collection(db, "inventory"), {
+            userId: userId,
+            imageUrl: imageUrl,
+            name: name,
+            quantity: quantity,
+            timestamp: serverTimestamp()
+        });
+        await setDoc(doc(db, "inventory", docRef.id), {
+            id: docRef.id
+        }, { merge: true });
+    }
+    catch (error) {
+        console.error('Error adding document with image: ', error);
+    }
 }
 
 export async function deleteItem(id: string) {
