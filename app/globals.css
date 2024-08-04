@@ -17,3 +17,8 @@
 .login-link:hover {
   color: #fff;
 }
+
+img {
+  object-fit: cover;
+  width: 100%;
+}
